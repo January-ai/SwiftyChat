@@ -24,6 +24,7 @@ public struct ChatView<Message: ChatMessage, User: ChatUser>: View {
     private var inset: EdgeInsets
     private var dateFormater: DateFormatter = DateFormatter()
     private var dateHeaderTimeInterval: TimeInterval
+    private var shouldHideDateHeaders: Bool = false
     private var shouldShowGroupChatHeaders: Bool
     private var reachedTop: (() -> Void)?
     
@@ -176,6 +177,7 @@ internal extension ChatView {
 
 public extension ChatView {
     func shouldShowDateHeader(messages: [Message], thisMessage: Message) -> Bool {
+        guard !shouldHideDateHeaders else { return false }
         if let messageIndex = messages.firstIndex(where: { $0.id == thisMessage.id }) {
             if messageIndex == 0 { return true }
             let prevMessage = messages[messageIndex]
@@ -232,6 +234,7 @@ public extension ChatView {
         scrollToBottom: Binding<Bool> = .constant(false),
         scrollTo: Binding<UUID?> = .constant(nil),
         dateHeaderTimeInterval: TimeInterval = 3600,
+        shouldHideDateHeaders: Bool = false,
         shouldShowGroupChatHeaders: Bool = false,
         inputView: @escaping () -> AnyView,
         inset: EdgeInsets = .init(),
@@ -246,6 +249,7 @@ public extension ChatView {
         self.dateFormater.timeZone = NSTimeZone.local
         self.dateFormater.doesRelativeDateFormatting = true
         self.dateHeaderTimeInterval = dateHeaderTimeInterval
+        self.shouldHideDateHeaders = shouldHideDateHeaders
         self.shouldShowGroupChatHeaders = shouldShowGroupChatHeaders
         self.reachedTop = reachedTop
         _scrollTo = scrollTo
