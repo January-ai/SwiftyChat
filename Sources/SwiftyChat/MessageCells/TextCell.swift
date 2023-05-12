@@ -108,17 +108,16 @@ internal struct TextCell<Message: ChatMessage>: View {
     }
     
     @ViewBuilder public var body: some View {
-//        if text.containsHtml() ||
-//            AttributeDetective(
-//                text: text,
-//                enabledDetectors: enabledDetectors
-//            ).doesContain()
-//        {
-//            attributedText
-//        } else {
-//            defaultText
-//        }
-        defaultText
+        if text.containsHtml() ||
+            AttributeDetective(
+                text: text,
+                enabledDetectors: enabledDetectors
+            ).doesContain()
+        {
+            attributedText
+        } else {
+            defaultText
+        }
     }
     
 }
